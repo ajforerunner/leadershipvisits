@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transforms Squad Logo</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #eff6ff, #2a5298);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        .logo-container {
+            text-align: center;
+            position: relative;
+        }
+
+        .logo-wrapper {
+            position: relative;
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .transforms-text {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 10px;
+            position: relative;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .squad-text {
+            font-size: 1.8rem;
+            font-weight: 300;
+            color: #e0e6ff;
+            letter-spacing: 0.3em;
+            margin-top: 10px;
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        .data-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            overflow: hidden;
+            border-radius: 20px;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #00d4ff;
+            border-radius: 50%;
+            animation: float 6s infinite linear;
+            opacity: 0.7;
+        }
+
+        .particle:nth-child(2n) {
+            background: #ff6b35;
+            animation-duration: 8s;
+        }
+
+        .particle:nth-child(3n) {
+            background: #f7931e;
+            animation-duration: 7s;
+        }
+
+        .transform-icon {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #fffff, #f7931e);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: rotate 4s infinite linear;
+            box-shadow: 0 10px 20px rgba(255, 998, 753, 0.8);
+        }
+
+        .transform-icon::before {
+            content: '⚡';
+            font-size: 24px;
+            color: white;
+        }
+
+        .data-flow {
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 30px;
+            background: linear-gradient(90deg, transparent, #93c5fd, transparent);
+            animation: dataFlow 3s infinite ease-in-out;
+            border-radius: 15px;
+            opacity: 0.6;
+        }
+
+        @keyframes glow {
+            0% {
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            }
+            100% {
+                text-shadow: 0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.5);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100px) translateX(-10px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100px) translateX(10px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes dataFlow {
+            0%, 100% {
+                opacity: 0.3;
+                transform: translateX(-50%) scaleX(0.5);
+            }
+            50% {
+                opacity: 0.8;
+                transform: translateX(-50%) scaleX(1);
+            }
+        }
+
+        .subtitle {
+            position: absolute;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            animation: fadeInUp 1s ease-out 1s both;
+        }
+
+        /* Hover effects */
+        .logo-wrapper:hover .transforms-text {
+            animation-duration: 1s;
+        }
+
+        .logo-wrapper:hover .transform-icon {
+            animation-duration: 2s;
+        }
+
+        .logo-wrapper:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <div class="logo-wrapper">
+            <div class="data-particles">
+                <!-- Particles will be generated by JavaScript -->
+            </div>
+            <div class="transforms-text">TRANSFORM</div>
+            <div class="squad-text">SQUAD</div>
+            <div class="transform-icon"></div>
+            <div class="data-flow"></div>
+            <div class="subtitle">Data • Analytics • Process</div>
+        </div>
+    </div>
+
+    <script>
+        // Generate floating particles
+        function createParticles() {
+            const particleContainer = document.querySelector('.data-particles');
+            const numParticles = 15;
+
+            for (let i = 0; i < numParticles; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random positioning
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                
+                particleContainer.appendChild(particle);
+            }
+        }
+
+        // Initialize particles when page loads
+        document.addEventListener('DOMContentLoaded', createParticles);
+
+        // Add click interaction
+        document.querySelector('.logo-wrapper').addEventListener('click', function() {
+            this.style.animation = 'none';
+            this.offsetHeight; // Trigger reflow
+            this.style.animation = null;
+        });
+    </script>
+</body>
+</html>
