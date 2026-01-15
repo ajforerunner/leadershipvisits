@@ -3,243 +3,1081 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transforms Squad Logo</title>
+    <title>Leadership Dashboard - Combined Version</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #eff6ff, #2a5298);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
+        :root {
+            /* Color Palette - Simplified, High Contrast Base */
+            --bg-color-start: #0a0a10; /* Dark base */
+            --bg-color-end: #100518;   /* Subtle deep purple end for gradient */
+            --card-bg: #111115; /* Slightly lighter card background */
+            --primary-color: #8a63de; /* Adjusted primary purple for accent */
+            --primary-light: #9b7aff; /* Lighter purple for gradients */
+            --text-color: #f0f0f5; /* Brighter white for contrast */
+            --gray-text: #888895;  /* Softer gray */
+            --card-radius: 12px;
+            --border-color: rgba(255, 255, 255, 0.1); /* Subtle solid border */
+
+            /* Blue theme colors */
+            --blue-primary: #3498db;
+            --blue-highlight: #5dade2;
+            --blue-card-bg: #151a28; /* Dark blue card bg */
+            --blue-border-color: rgba(52, 152, 219, 0.2); /* Blue solid border */
+
+            /* Cyan/Blue glow theme for flow visualization */
+            --flow-primary: #00e5ff;      /* Bright cyan blue */
+            --flow-highlight: #80ffff;    /* Lighter cyan */
+            --flow-glow: rgba(0, 229, 255, 0.8); /* Cyan glow with transparency */
+            --flow-intense-glow: rgba(0, 229, 255, 0.9); /* More intense glow for animation */
+            --flow-background: #000a12;   /* Very dark blue/black background */
+
+            /* Animation Timing */
+            --anim-fast: 0.2s;
+            --anim-medium: 0.4s;
+            --anim-slow: 0.6s;
+            
+            /* Green for completed status */
+            --completed-color: #4caf50;
         }
 
-        .logo-container {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto Condensed', sans-serif;
+        }
+
+        body {
+            /* Subtle gradient background */
+            background: linear-gradient(160deg, var(--bg-color-start) 30%, var(--bg-color-end) 100%);
+            background-attachment: fixed;
+            color: var(--text-color);
+            min-height: 100vh;
+            padding: 30px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        main {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        /* Card base styles - Reverted to Solid Border */
+        .card {
+            background: var(--card-bg); /* Direct background */
+            border-radius: var(--card-radius);
+            padding: 30px; /* Direct padding */
+            border: 1px solid var(--border-color); /* Solid border */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform var(--anim-medium) ease, box-shadow var(--anim-medium) ease;
+            display: flex; /* Keep flex for inner layout */
+            flex-direction: column; /* Keep column direction */
+             /* Animation */
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp var(--anim-slow) ease forwards;
+        }
+
+        /* Staggered animation delay for cards */
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+
+        /* Card hover effect */
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Blue themed card - Solid border */
+        .card.blue-theme {
+             background: var(--blue-card-bg);
+             border-color: var(--blue-border-color);
+        }
+         .card.blue-theme:hover {
+             border-color: rgba(52, 152, 219, 0.3);
+         }
+
+        /* Card Header - Updated for robust alignment */
+        .card-header {
+            display: flex;
+            justify-content: space-between; /* Push items apart */
+            align-items: flex-start; /* Align items to top */
+            margin-bottom: 25px;
+            gap: 15px; /* Gap between text block and button */
+            width: 100%; /* Ensure header spans width */
+        }
+
+        /* Wrapper for title and subtitle */
+        .card-header-text {
+            flex-grow: 1; /* Allow text block to take available space */
+        }
+
+        /* Title Typography */
+        .card-title {
+            font-size: 1.8rem;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-color);
+            margin-bottom: 6px;
+            line-height: 1.3;
+        }
+
+        .card-subtitle {
+            color: var(--gray-text);
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        /* Button styles */
+        .complete-btn {
+            background: var(--primary-color);
+            border: none;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all var(--anim-fast) ease;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0; /* Prevent button from shrinking */
+        }
+
+        /* Button hover effect */
+        .complete-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3);
+            filter: brightness(1.15);
+        }
+
+        .complete-btn:active {
+            transform: translateY(0px);
+            filter: brightness(0.95);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Blue button variant */
+        .complete-btn.blue-btn {
+            background: var(--blue-primary);
+        }
+        .complete-btn.blue-btn:hover {
+            filter: brightness(1.15);
+        }
+         .complete-btn.blue-btn:active {
+             filter: brightness(0.95);
+         }
+
+        .complete-btn svg {
+            transition: transform var(--anim-fast) ease;
+        }
+        .complete-btn:hover svg {
+            transform: translateX(2px);
+        }
+
+        /* Improved Team Members Table */
+        .combined-team-table {
+            margin-top: 40px;
+            background: var(--card-bg);
+            border-radius: var(--card-radius);
+            padding: 30px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            /* Animation */
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp var(--anim-slow) ease forwards;
+            animation-delay: 0.3s;
+        }
+
+        .combined-title {
+            font-size: 1.8rem;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-color);
+            margin-bottom: 25px;
             text-align: center;
             position: relative;
         }
 
-        .logo-wrapper {
-            position: relative;
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .transforms-text {
-            font-size: 3.5rem;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 10px;
-            position: relative;
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-
-        .squad-text {
-            font-size: 1.8rem;
-            font-weight: 300;
-            color: #e0e6ff;
-            letter-spacing: 0.3em;
-            margin-top: 10px;
-            animation: fadeInUp 1s ease-out 0.5s both;
-        }
-
-        .data-particles {
+        /* Add decorative underline to the title */
+        .combined-title:after {
+            content: '';
             position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--blue-primary));
+            border-radius: 2px;
+        }
+
+        /* Main table styles */
+        .team-table {
             width: 100%;
-            height: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 25px;
+        }
+
+        /* Table header styles */
+        .team-table th {
+            text-align: left;
+            padding: 16px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--gray-text);
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
             top: 0;
-            left: 0;
-            pointer-events: none;
-            overflow: hidden;
-            border-radius: 20px;
+            z-index: 10;
         }
 
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: #00d4ff;
-            border-radius: 50%;
-            animation: float 6s infinite linear;
-            opacity: 0.7;
+        /* First and last header cell with rounded corners */
+        .team-table th:first-child {
+            border-top-left-radius: 8px;
         }
 
-        .particle:nth-child(2n) {
-            background: #ff6b35;
-            animation-duration: 8s;
+        .team-table th:last-child {
+            border-top-right-radius: 8px;
         }
 
-        .particle:nth-child(3n) {
-            background: #f7931e;
-            animation-duration: 7s;
+        /* Table cell styles */
+        .team-table td {
+            padding: 16px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            vertical-align: middle;
+            transition: background 0.2s ease;
         }
 
-        .transform-icon {
-            position: absolute;
-            top: -20px;
-            right: -20px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(45deg, #fffff, #f7931e);
+        /* Row hover effect */
+        .team-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.07);
+            cursor: default;
+        }
+
+        /* Remove bottom border from last row */
+        .team-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Team avatar styles in table */
+        .team-avatar-table {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            animation: rotate 4s infinite linear;
-            box-shadow: 0 10px 20px rgba(255, 998, 753, 0.8);
+            font-weight: bold;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+            font-size: 1rem;
+            color: #ffffff;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .transform-icon::before {
-            content: '⚡';
-            font-size: 24px;
-            color: white;
+        /* Avatar hover effect */
+        .team-table tr:hover .team-avatar-table {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
         }
 
-        .data-flow {
+        /* Blue avatar variant */
+        .team-avatar-table.blue-avatar {
+            background: linear-gradient(135deg, var(--blue-primary), var(--blue-highlight));
+        }
+
+        /* Team member name styles */
+        .team-member-name {
+            font-weight: 500;
+            color: var(--text-color);
+            transition: color 0.2s ease;
+        }
+
+        /* Team member name hover */
+        .team-table tr:hover .team-member-name {
+            color: #ffffff;
+        }
+
+        /* Team category styles */
+        .team-category {
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        /* Category color styles */
+        .engagement {
+            color: var(--blue-primary);
+        }
+
+        .tour {
+            color: var(--primary-color);
+        }
+
+        /* Status styles */
+        .team-member-completed {
+            color: var(--completed-color);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        /* Status text with checkmark */
+        .status-text {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(76, 175, 80, 0.1);
+            padding: 6px 10px;
+            border-radius: 6px;
+            transition: background 0.2s ease;
+        }
+
+        /* Status hover effect */
+        .team-table tr:hover .status-text {
+            background: rgba(76, 175, 80, 0.2);
+        }
+
+        /* Pending status style */
+        .team-member-pending {
+            color: var(--gray-text);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 10px;
+            border-radius: 6px;
+            width: max-content;
+            transition: background 0.2s ease;
+        }
+
+        /* Pending status hover */
+        .team-table tr:hover .team-member-pending {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* See reports button styles */
+        .see-reports-btn {
+            background: rgba(76, 175, 80, 0.15);
+            border: 1px solid rgba(76, 175, 80, 0.5);
+            color: var(--completed-color);
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            white-space: nowrap;
+        }
+
+        /* Button hover effect */
+        .see-reports-btn:hover {
+            transform: translateY(-2px);
+            background: rgba(76, 175, 80, 0.25);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+            border-color: var(--completed-color);
+        }
+
+        .see-reports-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Glow effect for hover */
+        .see-reports-btn::after {
+            content: '';
             position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 200px;
-            height: 30px;
-            background: linear-gradient(90deg, transparent, #93c5fd, transparent);
-            animation: dataFlow 3s infinite ease-in-out;
-            border-radius: 15px;
-            opacity: 0.6;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 8px;
+            background: transparent;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.4);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: -1;
         }
 
-        @keyframes glow {
-            0% {
-                text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-            }
-            100% {
-                text-shadow: 0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.5);
-            }
+        .see-reports-btn:hover::after {
+            opacity: 1;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
+        /* Button shine effect */
+        .see-reports-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .see-reports-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Button icon animation */
+        .see-reports-btn svg {
+            transition: transform 0.3s ease;
+        }
+
+        .see-reports-btn:hover svg {
+            transform: translateX(3px);
+        }
+
+        /* Set specific column widths for better alignment */
+        .team-table td:first-child {
+            width: 70px;
+        }
+
+        .team-table td:nth-child(2) {
+            width: 22%;
+        }
+
+        .team-table td:nth-child(3) {
+            width: 23%;
+        }
+
+        .team-table td:nth-child(4) {
+            width: 25%;
+        }
+
+        .team-table td:nth-child(5) {
+            width: 30%;
+        }
+
+        /* Table row animation */
+        @keyframes fadeInRow {
+            from { 
+                opacity: 0; 
+                transform: translateY(15px);
             }
-            to {
+            to { 
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
-        @keyframes float {
-            0% {
-                transform: translateY(100px) translateX(-10px);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.7;
-            }
-            90% {
-                opacity: 0.7;
-            }
-            100% {
-                transform: translateY(-100px) translateX(10px);
-                opacity: 0;
-            }
+        /* Apply animation to table rows */
+        .team-table tbody tr {
+            opacity: 0;
+            animation: fadeInRow 0.5s ease forwards;
         }
 
-        @keyframes rotate {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
+        /* Staggered delay for each row */
+        .team-table tbody tr:nth-child(1) { animation-delay: 0.4s; }
+        .team-table tbody tr:nth-child(2) { animation-delay: 0.5s; }
+        .team-table tbody tr:nth-child(3) { animation-delay: 0.6s; }
+        .team-table tbody tr:nth-child(4) { animation-delay: 0.7s; }
+        .team-table tbody tr:nth-child(5) { animation-delay: 0.8s; }
+        .team-table tbody tr:nth-child(6) { animation-delay: 0.9s; }
+        .team-table tbody tr:nth-child(7) { animation-delay: 1.0s; }
+        .team-table tbody tr:nth-child(8) { animation-delay: 1.1s; }
+        .team-table tbody tr:nth-child(9) { animation-delay: 1.2s; }
+        .team-table tbody tr:nth-child(10) { animation-delay: 1.3s; }
+        .team-table tbody tr:nth-child(11) { animation-delay: 1.4s; }
+        .team-table tbody tr:nth-child(12) { animation-delay: 1.5s; }
+        .team-table tbody tr:nth-child(13) { animation-delay: 1.6s; }
+
+        /* Energy flow section - Reverted to Solid Border */
+        .energy-flow {
+            margin-top: 40px;
+            background: var(--card-bg); /* Direct background */
+            border-radius: var(--card-radius);
+            padding: 35px; /* Direct padding */
+            border: 1px solid var(--border-color); /* Solid border */
+            position: relative;
+            overflow: hidden; /* Keep overflow hidden for animations inside */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            /* Animation */
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp var(--anim-slow) ease forwards;
+            animation-delay: 0.4s;
         }
 
-        @keyframes dataFlow {
-            0%, 100% {
-                opacity: 0.3;
-                transform: translateX(-50%) scaleX(0.5);
-            }
-            50% {
-                opacity: 0.8;
-                transform: translateX(-50%) scaleX(1);
-            }
+        .energy-title {
+            font-size: 2rem;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            text-align: center;
+            font-weight: 700;
+            color: var(--text-color);
         }
 
-        .subtitle {
+        /* Flow Visualization - Updated with cyan glow */
+        .flow-visualization {
+            position: relative;
+            height: 120px;
+            margin-top: 35px;
+        }
+
+        .flow-path {
             position: absolute;
-            bottom: -60px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.7);
-            animation: fadeInUp 1s ease-out 1s both;
+            top: 50%;
+            left: 5%;
+            width: 90%;
+            height: 20px;
+            background-color: var(--flow-background); /* Darker background */
+            transform: translateY(-50%);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 229, 255, 0.2); /* Subtle cyan border */
         }
 
-        /* Hover effects */
-        .logo-wrapper:hover .transforms-text {
-            animation-duration: 1s;
+        .flow-highlight {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--flow-primary), var(--flow-highlight), var(--flow-primary));
+            border-radius: 10px;
+            transition: width 1.5s cubic-bezier(0.65, 0, 0.35, 1);
+            background-size: 200% 100%;
+            animation: animateGradient 3s linear infinite;
+            box-shadow: 0 0 15px var(--flow-glow), 0 0 5px var(--flow-glow); /* Multiple layers of glow */
         }
 
-        .logo-wrapper:hover .transform-icon {
-            animation-duration: 2s;
+        .flow-node {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: var(--flow-primary);
+            border-radius: 50%;
+            top: 50%;
+            left: 0%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            box-shadow: 
+                0 0 10px var(--flow-glow),        /* Inner glow */
+                0 0 20px var(--flow-glow),        /* Middle glow */
+                0 0 30px rgba(0, 229, 255, 0.5);  /* Outer glow */
+            transition: left 1.5s cubic-bezier(0.65, 0, 0.35, 1);
+            animation: pulseNode 2s infinite ease-in-out;
+            border: 2px solid rgba(255, 255, 255, 0.8); /* White border for extra definition */
         }
 
-        .logo-wrapper:hover {
-            transform: scale(1.05);
-            transition: transform 0.3s ease;
+        .flow-node svg {
+             transition: transform 0.5s ease;
+        }
+        .flow-node:hover svg {
+            transform: rotate(360deg);
+        }
+
+        .flow-output {
+            position: absolute;
+            top: 0;
+            left: 5%;
+            transform: translateY(-120%);
+            background-color: var(--flow-background); /* Dark background */
+            border: 1px solid var(--flow-primary); /* Cyan border */
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            color: var(--flow-primary); /* Cyan text */
+            box-shadow: 0 0 10px var(--flow-glow); /* Cyan glow */
+            z-index: 3;
+            opacity: 0;
+            transition: opacity 0.5s ease 1s;
+        }
+         .flow-output svg {
+             width: 16px; height: 16px;
+         }
+
+        /* Keyframe Animations - Updated for cyan glow */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes animateGradient {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        @keyframes pulseNode {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1); 
+                box-shadow: 
+                    0 0 10px var(--flow-glow),
+                    0 0 20px var(--flow-glow),
+                    0 0 30px rgba(0, 229, 255, 0.5);
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.05); 
+                box-shadow: 
+                    0 0 15px var(--flow-intense-glow),
+                    0 0 30px var(--flow-intense-glow),
+                    0 0 45px rgba(0, 229, 255, 0.7);
+            }
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+             main { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 20px; }
+            main { grid-template-columns: 1fr; gap: 25px; }
+            .card { padding: 25px; } /* Adjust padding */
+            
+            /* Ensure header text block wraps correctly */
+            .card-header { flex-wrap: wrap; } /* Allow wrapping */
+            .card-header-text { min-width: 150px; } /* Prevent text block becoming too narrow */
+
+            .complete-btn { /* Ensure button doesn't prevent wrapping */
+                 margin-left: auto; /* Push to right if space allows */
+                 /* On wrap, it will take full width due to parent flex wrap */
+            }
+            /* Specific fix for mobile when button wraps */
+             .card-header > .complete-btn {
+                 width: 100%;
+                 justify-content: center;
+                 margin-left: 0; /* Reset margin when wrapped */
+             }
+
+            .combined-team-table {
+                padding: 20px;
+                overflow-x: auto; /* Enable horizontal scrolling on mobile */
+            }
+            
+            .combined-title {
+                font-size: 1.5rem;
+            }
+            
+            .combined-title:after {
+                width: 60px;
+            }
+            
+            .team-table {
+                min-width: 650px; /* Ensure minimum width for scrolling */
+            }
+            
+            .team-table th, .team-table td {
+                padding: 12px 10px;
+            }
+            
+            .team-avatar-table {
+                width: 36px;
+                height: 36px;
+                font-size: 0.9rem;
+            }
+            
+            .status-text, .team-member-pending {
+                padding: 5px 8px;
+            }
+            
+            .see-reports-btn {
+                padding: 6px 10px;
+            }
+
+            .energy-flow { padding: 30px; } /* Adjust padding */
+            .energy-title { font-size: 1.6rem; margin-bottom: 40px; }
+            .flow-path { left: 2%; width: 96%; }
+            .flow-output { left: 2%; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 15px; }
+            main { gap: 20px; }
+            .card { padding: 20px; } /* Adjust padding */
+            .card-title { font-size: 1.5rem; letter-spacing: 1px;}
+            
+            .combined-team-table {
+                padding: 15px;
+            }
+            
+            .combined-title {
+                font-size: 1.3rem;
+            }
+            
+            .combined-title:after {
+                width: 50px;
+                height: 2px;
+            }
+            
+            .team-table {
+                min-width: 600px;
+            }
+            
+            .team-table th, .team-table td {
+                padding: 10px 8px;
+                font-size: 0.85rem;
+            }
+            
+            .team-avatar-table {
+                width: 32px;
+                height: 32px;
+                font-size: 0.8rem;
+            }
+            
+            .team-category {
+                font-size: 0.8rem;
+            }
+            
+            .see-reports-btn {
+                padding: 5px 8px;
+                font-size: 0.7rem;
+            }
+
+            .complete-btn { padding: 10px 15px; font-size: 0.75rem; }
+            .energy-flow { padding: 25px; } /* Adjust padding */
+            .energy-title { font-size: 1.4rem; }
+            .flow-node { width: 45px; height: 45px; }
+            .flow-output { font-size: 0.9rem; padding: 7px 14px; }
         }
     </style>
 </head>
 <body>
-    <div class="logo-container">
-        <div class="logo-wrapper">
-            <div class="data-particles">
-                <!-- Particles will be generated by JavaScript -->
+    <div class="container">
+        <main>
+            <div class="card blue-theme">
+                <div class="card-header">
+                    <div class="card-header-text">
+                        <h2 class="card-title">Leadership Engagement</h2>
+                    </div>
+                    <a href="https://forms.office.com/e/JkgTZM73wn" class="complete-btn blue-btn" target="_blank" rel="noopener noreferrer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"> <path d="M5 12h14M12 5l7 7-7 7"/> </svg> COMPLETE FORM
+                    </a>
+                </div>
             </div>
-            <div class="transforms-text">TRANSFORM</div>
-            <div class="squad-text">SQUAD</div>
-            <div class="transform-icon"></div>
-            <div class="data-flow"></div>
-            <div class="subtitle">Data • Analytics • Process</div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-header-text">
+                        <h2 class="card-title">Leadership Tour</h2>
+                    </div>
+                    <a href="https://equans.sharepoint.com/sites/BIProjects/_layouts/15/listforms.aspx?cid=ZmM4MjNhMjYtMDY4NS00YzRmLWIzMTQtYTVmNDdlOWUzODY4&nav=OGQxNjBjYjEtNzg5MS00N2NjLWI0YTctODY3OTk0YWQzYmFl" class="complete-btn" target="_blank" rel="noopener noreferrer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"> <path d="M5 12h14M12 5l7 7-7 7"/> </svg> COMPLETE FORM
+                    </a>
+                </div>
+            </div>
+        </main>
+        
+        <div class="card" style="margin-bottom: 40px; animation-delay: 0.25s;">
+            <div style="text-align: center; margin-bottom: 10px;">
+                <p style="font-size: 1.1rem; line-height: 1.6; color: var(--text-color);">
+                    Team members from both Leadership Engagement and Leadership Tour groups have the flexibility to participate in either type of visit, supporting our collaborative approach to leadership development.
+                </p>
+            </div>
         </div>
-    </div>
 
-    <script>
-        // Generate floating particles
-        function createParticles() {
-            const particleContainer = document.querySelector('.data-particles');
-            const numParticles = 15;
+        <!-- Improved Team Member Status Table -->
+        <div class="combined-team-table">
+            <h2 class="combined-title">TEAM MEMBERS STATUS</h2>
+            <table class="team-table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Report</th>
+                    </tr>
+                </thead>
+                <tbody>
+<!-- Leadership Engagement Team Members -->
+<tr>
+    <td><div class="team-avatar-table blue-avatar">SW</div></td>
+    <td class="team-member-name">Steven Weir</td>
+    <td class="team-category engagement">Leadership Engagement</td>
+    <td>
+        <div class="team-member-completed">
+            <div class="status-text">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed (3 visits)
+            </div>
+        </div>
+    </td>
+    <td>
+        <a href="https://equans.sharepoint.com/:f:/r/sites/BYESUK-Contracting-HealthandSafety/Shared%20Documents/Leadership%20Engagement%20Visit/2025?csf=1&web=1&e=o3dBhR" class="see-reports-btn" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            See Report
+        </a>
+    </td>
+</tr>
+<tr>
 
-            for (let i = 0; i < numParticles; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                
-                // Random positioning
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 6 + 's';
-                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
-                
-                particleContainer.appendChild(particle);
-            }
-        }
+</tr>
+<tr>
+    <td><div class="team-avatar-table blue-avatar">CM</div></td>
+    <td class="team-member-name">Chris Mosley</td>
+    <td class="team-category engagement">Leadership Engagement</td>
+    <td>
+        <div class="team-member-completed">
+            <div class="status-text">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed (4 visits)
+            </div>
+        </div>
+    </td>
+    <td>
+        <a href="https://equans.sharepoint.com/:f:/r/sites/BYESUK-Contracting-HealthandSafety/Shared%20Documents/Leadership%20Engagement%20Visit/2025?csf=1&web=1&e=o3dBhR" class="see-reports-btn" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            See Reports
+        </a>
+    </td>
+</tr>
+<tr>
+    <td><div class="team-avatar-table blue-avatar">MK</div></td>
+    <td class="team-member-name">Mark Kelly</td>
+    <td class="team-category engagement">Leadership Engagement</td>
+    <td>
+        <div class="team-member-completed">
+            <div class="status-text">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed (3 visit)
+            </div>
+        </div>
+    </td>
+    <td>
+        <a href="https://equans.sharepoint.com/:f:/r/sites/BYESUK-Contracting-HealthandSafety/Shared%20Documents/Leadership%20Engagement%20Visit/2025?csf=1&web=1&e=o3dBhR" class="see-reports-btn" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            See Report
+        </a>
+    </td>
+</tr>
+</tr>
 
-        // Initialize particles when page loads
-        document.addEventListener('DOMContentLoaded', createParticles);
+<tr>
+    <td><div class="team-avatar-table blue-avatar">AM</div></td>
+    <td class="team-member-name">Alan Miller</td>
+    <td class="team-category engagement">Leadership Engagement</td>
+    <td><div class="team-member-pending">Pending</div></td>
+    <td></td>
+</tr>
+<tr>
+    <td><div class="team-avatar-table blue-avatar">SM</div></td>
+    <td class="team-member-name">Simon Millward</td>
+    <td class="team-category engagement">Leadership Engagement</td>
+    <td>
+        <div class="team-member-completed">
+            <div class="status-text">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed (9 visits)
+            </div>
+        </div>
+    </td>
+    <td>
+        <a href="https://equans.sharepoint.com/:f:/r/sites/BYESUK-Contracting-HealthandSafety/Shared%20Documents/Leadership%20Engagement%20Visit/2025?csf=1&web=1&e=o3dBhR" class="see-reports-btn" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            See Reports
+        </a>
+    </td>
+</tr>
+<tr>
+    <td><div class="team-avatar-table blue-avatar">CL</div></td>
+    <td class="team-member-name">Charlie Louet</td>
+    <td class="team-category engagement">Leadership Engagement</td>
+    <td><div class="team-member-completed">
+            <div class="status-text">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed (4 visits)
+            </div>
+        </div>
+    </td>
+    <td>
+        <a href="https://equans.sharepoint.com/:f:/r/sites/BYESUK-Contracting-HealthandSafety/Shared%20Documents/Leadership%20Engagement%20Visit/2025?csf=1&web=1&e=o3dBhR" class="see-reports-btn" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            See Reports
+        </a></td>
+</tr>
+<!-- Leadership Tour Team Members -->
+<tr>
+    <td><div class="team-avatar-table">MV</div></td>
+    <td class="team-member-name">Michaela Valovicova</td>
+<td class="team-category tour">Leadership Tour</td>
+     <td>
+        <div class="team-member-completed">
+            <div class="status-text">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed (1 visit)
+            </div>
+        </div>
+    </td>
+    <td>
+        <a href="https://equans.sharepoint.com/:f:/r/sites/BYESUK-Contracting-HealthandSafety/Shared%20Documents/Leadership%20Engagement%20Visit/2025?csf=1&web=1&e=o3dBhR" class="see-reports-btn" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            See Report
+        </a>
+    </td>
+</tr>
+<tr>
+    <td><div class="team-avatar-table">EG</div></td>
+    <td class="team-member-name">Emma Gould</td>
+    <td class="team-category tour">Leadership Tour</td>
+        <td>
+        <div class="team-member-completed">
+            <div class="status-text">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed (1 visit)
+            </div>
+        </div>
+    </td>
+    <td>
+        <a href="https://equans.sharepoint.com/:f:/r/sites/BYESUK-Contracting-HealthandSafety/Shared%20Documents/Leadership%20Engagement%20Visit/2025?csf=1&web=1&e=o3dBhR" class="see-reports-btn" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            See Report
+        </a>
+    </td>
+<tr>
+    <td><div class="team-avatar-table">JC</div></td>
+    <td class="team-member-name">Jerome Crespin</td>
+    <td class="team-category tour">Leadership Tour</td>
+     <td>
+        <div class="team-member-completed">
+            <div class="status-text">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed (3 visits)
+            </div>
+        </div>
+    </td>
+    <td>
+        <a href="https://equans.sharepoint.com/:f:/r/sites/BYESUK-Contracting-HealthandSafety/Shared%20Documents/Leadership%20Engagement%20Visit/2025?csf=1&web=1&e=o3dBhR" class="see-reports-btn" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            See Report
+        </a>
+    </td>
+</tr>
+<tr>
+    <td><div class="team-avatar-table">RG</div></td>
+    <td class="team-member-name">Rachel Gwilliam</td>
+    <td class="team-category tour">Leadership Tour</td>
+    <td><div class="team-member-pending">Pending</div></td>
+    <td></td>
+</tr>
+<tr>
+    <td><div class="team-avatar-table">EH</div></td>
+    <td class="team-member-name">Emmanuel Helman</td>
+    <td class="team-category tour">Leadership Tour</td>
+    <td><div class="team-member-pending">Pending</div></td>
+    <td></td>
+</tr>
+                </tbody>
+            </table>
+        </div>
 
-        // Add click interaction
-        document.querySelector('.logo-wrapper').addEventListener('click', function() {
-            this.style.animation = 'none';
-            this.offsetHeight; // Trigger reflow
-            this.style.animation = null;
-        });
-    </script>
+
 </body>
 </html>
+
+
+
+
+
+
